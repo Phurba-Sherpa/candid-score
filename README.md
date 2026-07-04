@@ -76,9 +76,21 @@ The core application flow is implemented and runnable in local development. A fe
 - Docker Desktop
 - Docker Compose
 
-### Environment
+### Local Setup
 
-Create a local `.env` file from `.env.example`.
+1. Clone the repository and enter the project directory:
+
+```bash
+git clone git@github.com:Phurba-Sherpa/candid-score.git && cd candid-score
+```
+
+2. Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Review the root `.env` values.
 
 The root `.env` is the single local configuration file for this project. It contains backend settings and can also provide `VITE_API_URL` to the frontend development container.
 
@@ -98,15 +110,19 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 
 `SECRET_KEY` is required. The backend will refuse to start if it is missing, left as the example placeholder value, or shorter than 16 characters.
 
-### Run With Docker Compose
+4. Start the local development stack:
 
-Start the local development stack with:
+```bash
+docker compose up --build
+```
+
+The backend runs `alembic upgrade head` on startup before launching the FastAPI development server.
+
+If you want to start only the main app services explicitly, use:
 
 ```bash
 docker compose up --build db be fe
 ```
-
-The backend runs `alembic upgrade head` on startup before launching the FastAPI development server.
 
 If you also want a database UI, include Adminer:
 
@@ -121,9 +137,7 @@ Available services:
 - Adminer: `http://localhost:8080`
 - Postgres from host: `localhost:5433`
 
-### Seed Demo Data
-
-After the backend and database are running, seed the local environment with:
+5. Seed the local demo data after the backend is up:
 
 ```bash
 docker compose exec be uv run python -m app.seed
@@ -134,14 +148,16 @@ Run the seed after the backend container has started successfully so the databas
 The seed script is idempotent:
 
 - It creates or updates the demo users
-- It inserts demo candidates only when they do not already exist
+- It creates or updates the demo candidates
+- It creates or updates the demo scores for candidates already in review
 
 Seeded credentials:
 
 - Admin: `admin@yopmail.com` / `admin`
-- Recruiter: `recruiter@yopmail.com` / `recruiter.`
+- Reviewer: `reviewer@yopmail.com` / `reviewer`
 
-The seed currently inserts 12 sample candidates.
+The seed creates 12 sample candidates: 3 each in `new`, `reviewed`, `hired`, and `rejected`.
+All `reviewed`, `hired`, and `rejected` candidates are seeded with scores across the app's review categories.
 
 ## Example API Calls
 
