@@ -6,6 +6,7 @@ engine = create_engine(
     settings.database_url,
     echo=True,
     pool_pre_ping=True,
+    connect_args={"options": "-c timezone=UTC"},
 )
 
 

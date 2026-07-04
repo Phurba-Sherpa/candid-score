@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from enum import Enum
 
-from sqlalchemy import CheckConstraint, Column, String
+from sqlalchemy import CheckConstraint, Column, DateTime, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlmodel import Field, SQLModel
 
@@ -29,7 +29,10 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     hashed_password: str
     role: Role = Field(default=Role.reviewer)
-    created_at: datetime = Field(default_factory=_utcnow, nullable=False)
+    created_at: datetime = Field(
+        default_factory=_utcnow,
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
 
 
 class Candidate(SQLModel, table=True):
@@ -45,7 +48,10 @@ class Candidate(SQLModel, table=True):
     )
     internal_notes: str | None = Field(default=None)
     summary: str | None = Field(default=None)
-    created_at: datetime = Field(default_factory=_utcnow, nullable=False)
+    created_at: datetime = Field(
+        default_factory=_utcnow,
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
 
 
 class Score(SQLModel, table=True):
@@ -60,4 +66,7 @@ class Score(SQLModel, table=True):
     category: str
     score: int
     note: str | None = Field(default=None)
-    created_at: datetime = Field(default_factory=_utcnow, nullable=False)
+    created_at: datetime = Field(
+        default_factory=_utcnow,
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
