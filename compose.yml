@@ -16,10 +16,5 @@ services:
     container_name: be
     depends_on:
       - db
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
   fe:
     container_name: fe
