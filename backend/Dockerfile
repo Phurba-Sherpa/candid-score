@@ -12,6 +12,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev
 
 # Copy application source
+COPY alembic.ini ./alembic.ini
+COPY migrations ./migrations
 COPY app ./app
 COPY main.py ./main.py
 
